@@ -1,0 +1,1 @@
+Aplicación en desarrollo utilizando Java, con ayuda de librerias como Volley para el consumo de una api restful enfocada a ayudar a los usuarios con el cuidado de las plantas en sus hogares.
