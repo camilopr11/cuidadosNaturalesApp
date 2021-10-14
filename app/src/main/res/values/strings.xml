@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Cuidados Naturales</string>
+    <string-array name="alert_types">
+        <item>Select alert type</item>
+        <item>Water</item>
+        <item>Fertilizer</item>
+        <item>Compost</item>
+        <item>Trim</item>
+    </string-array>
+</resources>
