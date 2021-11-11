@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,10 +32,12 @@ import java.util.List;
 
 public class EncyclopediaListActivity extends AppCompatActivity {
     private Button getBtn;
+    private EditText searchTxt;
     ProgressBar progressBar;
     private List<Info> infos;
     private RecyclerView recyclerView;
     UtilService utilService;
+    static final String apiUrl = "https://cuidadosnaturales.herokuapp.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class EncyclopediaListActivity extends AppCompatActivity {
         infos = new ArrayList<>();
         recyclerView = findViewById(R.id.listRecyclerView);
         getBtn = findViewById(R.id.getBtn);
+        searchTxt = findViewById(R.id.searchTxt);
 
         // Llamar a función listInfo para listar información de enciclopedias
         getBtn.setOnClickListener(new View.OnClickListener() {
@@ -61,10 +65,16 @@ public class EncyclopediaListActivity extends AppCompatActivity {
      * @param view
      */
     private void listInfo(View view) {
+        infos.clear();
+        String endpoint = "";
         progressBar.setVisibility(View.VISIBLE);
-        String apiKey = "http://192.168.1.82:3000/enciclopedias/"; // Dirección ip correspondiente a servidor de API, con respectivo puerto y ruta de enciclopedias
+        if(searchTxt.getText().toString().equals("")){
+            endpoint = apiUrl+"/enciclopedias/"; // ruta de enciclopedias
+        }else{
+            endpoint = apiUrl+"/enciclopedias/title/"+searchTxt.getText().toString(); // ruta de enciclopedias
+        }
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
-                apiKey, null, new Response.Listener<JSONArray>() {
+                endpoint, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 // guardar response

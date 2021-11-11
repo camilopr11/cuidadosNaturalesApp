@@ -49,6 +49,7 @@ public class AlertsActivity extends AppCompatActivity {
     private String name, type, dateStr, img;
     private Date date;
     UtilService utilService;
+    static final String apiUrl = "https://cuidadosnaturales.herokuapp.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,9 +141,9 @@ public class AlertsActivity extends AppCompatActivity {
         params.put("type", type);
         params.put("date", date.toString());
         params.put("img_url", img);
-        String apiKey = "http://192.168.1.82:3000/alerts/"; // Dirección ip correspondiente a servidor de API, con respectivo puerto y ruta de alertas
+        String endpoint = apiUrl+"/alerts/"; // ruta de alertas
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                apiKey, new JSONObject(params), new Response.Listener<JSONObject>() {
+                endpoint, new JSONObject(params), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {

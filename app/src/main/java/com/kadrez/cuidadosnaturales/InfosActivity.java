@@ -48,6 +48,7 @@ public class InfosActivity extends AppCompatActivity {
     private String title, description, content, category;
     private Date date;
     UtilService utilService;
+    static final String apiUrl = "https://cuidadosnaturales.herokuapp.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +90,9 @@ public class InfosActivity extends AppCompatActivity {
         params.put("description", description);
         params.put("content", content);
         params.put("category", category);
-        String apiKey = "http://192.168.1.82:3000/enciclopedias/"; // Dirección ip correspondiente a servidor de API, con respectivo puerto y ruta de enciclopedias
+        String endpoint = apiUrl+"/enciclopedias/"; // ruta de enciclopedias
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                apiKey, new JSONObject(params), new Response.Listener<JSONObject>() {
+                endpoint, new JSONObject(params), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {

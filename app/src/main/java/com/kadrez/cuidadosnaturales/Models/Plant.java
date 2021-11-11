@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Plant {
 
+    private String id;
     private String name;
     private String type;
     private String scientific_name;
@@ -14,7 +15,8 @@ public class Plant {
     public Plant() {
     }
 
-    public Plant(String name, String type, String scientific_name, String order, String img_url) {
+    public Plant(String id, String name, String type, String scientific_name, String order, String img_url) {
+        this.id = id;
         this.name = name;
         this.type = type;
         this.scientific_name = scientific_name;
@@ -22,6 +24,9 @@ public class Plant {
         this.img_url = img_url;
     }
 
+    public String getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -43,6 +48,9 @@ public class Plant {
         return img_url;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public void setName(String name) {
         this.name = name;
