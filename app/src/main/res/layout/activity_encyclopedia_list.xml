@@ -20,6 +20,17 @@
             android:textSize="20sp"
             android:layout_marginTop="10dp"
             />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/searchTxt"
+            />
+
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,9 +56,6 @@
                 />
 
 
-
-
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
@@ -59,7 +67,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Get Info"
+                android:text="Search"
                 android:textSize="18sp"
                 android:textAllCaps="false"
                 android:background="@drawable/input_field"

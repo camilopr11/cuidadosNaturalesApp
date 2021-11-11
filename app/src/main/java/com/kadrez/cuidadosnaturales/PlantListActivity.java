@@ -35,6 +35,7 @@ public class PlantListActivity extends AppCompatActivity {
     private List<Plant> plants;
     private RecyclerView recyclerView;
     UtilService utilService;
+    static final String apiUrl = "https://cuidadosnaturales.herokuapp.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,16 +62,18 @@ public class PlantListActivity extends AppCompatActivity {
      * @param view
      */
     private void listPlants(View view) {
+        plants.clear();
         progressBar.setVisibility(View.VISIBLE);
-        String apiKey = "http://192.168.1.82:3000/plants";  // Dirección ip correspondiente a servidor de API, con respectivo puerto y ruta de plantas
+        String endpoint = apiUrl+"/plants";  // ruta de plantas
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
-                apiKey, null, new Response.Listener<JSONArray>() {
+                endpoint, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 // guardar response
                 try {
                     for (int i = 0; i < response.length(); i++) {
                         Plant plant = new Plant();
+                        plant.setId(response.getJSONObject(i).getString("_id"));
                         plant.setName(response.getJSONObject(i).getString("name"));
                         plant.setType(response.getJSONObject(i).getString("type"));
                         plant.setScientificName(response.getJSONObject(i).getString("scientific_name"));
@@ -114,5 +117,7 @@ public class PlantListActivity extends AppCompatActivity {
         RecyclerViewPlantsAdapter myadapter = new RecyclerViewPlantsAdapter(this, plants);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(myadapter);
+
     }
+
 }

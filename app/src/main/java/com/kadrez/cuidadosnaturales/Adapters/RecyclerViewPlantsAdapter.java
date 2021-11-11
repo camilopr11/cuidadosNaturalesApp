@@ -2,26 +2,52 @@ package com.kadrez.cuidadosnaturales.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.ServerError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.kadrez.cuidadosnaturales.AlertListActivity;
+import com.kadrez.cuidadosnaturales.ManagePlantsActivity;
 import com.kadrez.cuidadosnaturales.Models.Plant;
+import com.kadrez.cuidadosnaturales.PlantListActivity;
+import com.kadrez.cuidadosnaturales.PlantsActivity;
 import com.kadrez.cuidadosnaturales.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class RecyclerViewPlantsAdapter extends RecyclerView.Adapter<RecyclerViewPlantsAdapter.MyViewHolder> {
 
+    static final String apiUrl = "https://cuidadosnaturales.herokuapp.com";
     private Context mContext;
     private List<Plant> mData;
     RequestOptions option;
@@ -57,6 +83,66 @@ public class RecyclerViewPlantsAdapter extends RecyclerView.Adapter<RecyclerView
                 mContext.startActivity(i);
 
             }
+        });
+
+        viewHolder.view_container.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+
+            public boolean onLongClick(View view) {
+                String id = mData.get(viewHolder.getAdapterPosition()).getId();
+                /**
+                 * Obtener lista de plantas mediante petición a API
+                 *
+                 * @param view
+                 */
+                String endpoint = apiUrl+"/plants/"+id;  // ruta de plantas
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE,
+                        endpoint, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (response.getBoolean("success")) {
+                                Toast.makeText(mContext, "Plant deleted successfully", Toast.LENGTH_SHORT).show();
+                                Intent i = new Intent(mContext, PlantListActivity.class);
+                                mContext.startActivity(i);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        NetworkResponse response = error.networkResponse;
+                        if (error instanceof ServerError && response != null) {
+                            try {
+                                String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                JSONObject obj = new JSONObject(res);
+                                Toast.makeText(mContext, obj.getString("msg"), Toast.LENGTH_SHORT).show();
+                            } catch (JSONException | UnsupportedEncodingException je) {
+                                je.printStackTrace();
+                            }
+                        }
+                    }
+                }) {
+                };
+
+                    // Establecer la política de reintentos
+                    int socketTime = 3000;
+                    RetryPolicy policy = new DefaultRetryPolicy(socketTime,
+                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    jsonObjectRequest.setRetryPolicy(policy);
+
+                    // Agregar petición
+                    RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+                    requestQueue.add(jsonObjectRequest);
+
+
+                return true;
+
+            }
+
         });
 
 

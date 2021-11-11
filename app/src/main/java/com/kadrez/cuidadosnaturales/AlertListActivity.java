@@ -40,6 +40,7 @@ public class AlertListActivity extends AppCompatActivity {
     private List<Alert> alerts;
     private RecyclerView recyclerView;
     UtilService utilService;
+    static final String apiUrl = "https://cuidadosnaturales.herokuapp.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +68,9 @@ public class AlertListActivity extends AppCompatActivity {
      */
     private void listAlerts(View view) {
         progressBar.setVisibility(View.VISIBLE);
-        String apiKey = "http://192.168.1.82:3000/alerts";  // Dirección ip correspondiente a servidor de API, con respectivo puerto y ruta de alertas
+        String endpoint = apiUrl+"/alerts";  // ruta de alertas
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
-                apiKey, null, new Response.Listener<JSONArray>() {
+                endpoint, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 // guardar response

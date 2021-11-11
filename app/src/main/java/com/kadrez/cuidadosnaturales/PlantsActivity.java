@@ -47,6 +47,7 @@ public class PlantsActivity extends AppCompatActivity {
     ProgressBar progressBar;
     private String name, type, scientific_name, order, img;
     UtilService utilService;
+    static final String apiUrl = "https://cuidadosnaturales.herokuapp.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,9 +92,9 @@ public class PlantsActivity extends AppCompatActivity {
         params.put("scientific_name", scientific_name);
         params.put("order", order);
         params.put("img_url", img);
-        String apiKey = "http://192.168.1.82:3000/createPlants"; // Dirección ip correspondiente a servidor de API, con respectivo puerto y ruta de plantas
+        String endpoint = apiUrl+"/plants"; //  ruta de plantas
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                apiKey, new JSONObject(params), new Response.Listener<JSONObject>() {
+                endpoint, new JSONObject(params), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
